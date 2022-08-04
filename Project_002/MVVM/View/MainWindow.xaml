@@ -1,0 +1,156 @@
+﻿<Window x:Class="Project_002.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Project_002" xmlns:viewmodel="clr-namespace:Project_002.MVVM.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True"
+        ResizeMode="CanResize">
+    <Window.DataContext>
+        <viewmodel:MainViewModel/>
+    </Window.DataContext>
+    
+    <DockPanel Background="#1E1E1E"
+          Margin="7">
+        <Border Height="28"
+                Background="#252525" 
+                DockPanel.Dock="Top">
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick"
+                              Command="{Binding MoveWindowCommand}"/>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Module 13"
+                           Foreground="LightGray"
+                           FontFamily="Consolas"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="100,0,0,0"/>
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,4,0">
+
+
+                    <Button Command="{Binding MinimizeWindowCommand}"
+                            Background="Transparent"
+                            BorderBrush="Transparent">
+                        <Canvas Width="24" 
+                                Height="24">
+                            <Path Fill="White"
+                                  Data="M20,14H4V10H20" />
+                        </Canvas>
+                    </Button>
+                    <Button Command="{Binding MaximizeWindowCommand}"
+                            Background="Transparent"
+                            BorderBrush="Transparent">
+                        <Canvas Width="24" 
+                                Height="24">
+                            <Path Fill="White"
+                                  Data="M4,4H20V20H4V4M6,8V18H18V8H6Z" />
+                        </Canvas>
+                    </Button>
+                    <Button Command="{Binding ShutdownWindowCommand}"
+                            Background="Transparent"
+                            BorderBrush="Transparent">
+                        <Canvas Width="24" 
+                                Height="24">
+                            <Path Fill="White"
+                                  Data="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z" />
+                        </Canvas>
+                    </Button>
+                    
+                    
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border Width="48"
+                HorizontalAlignment="Left"
+                Background="#252525">
+            <Border.Style>
+                <Style>
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Border.MouseEnter">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Border.Width)"
+                                                         To="120"
+                                                         Duration="0:0:.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Border.MouseLeave">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Border.Width)"
+                                                         To="48"
+                                                         Duration="0:0:.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <StackPanel>
+                <Button Content="Открыть счет"
+                        FontSize="16"
+                        FontWeight="Normal"
+                        Foreground="LightGray"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Command="{Binding OpenAccountCommand}"
+                        CommandParameter="{Binding ElementName = DBView, Path = SelectedIndex}"/>
+                <Button Content="Закрыть счет"
+                        FontSize="16"
+                        FontWeight="Normal"
+                        Foreground="LightGray"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Command="{Binding CloseAccountCommand}"
+                        CommandParameter="{Binding ElementName = DBView, Path = SelectedIndex}"/>
+                <Button Content="Перевести"
+                        FontSize="16"
+                        FontWeight="Normal"
+                        Foreground="LightGray"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Command="{Binding }"
+                        CommandParameter="{Binding ElementName = DBView, Path = SelectedIndex}"/>
+                <Button Content="Пополнить"
+                        FontSize="16"
+                        FontWeight="Normal"
+                        Foreground="LightGray"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Command="{Binding ReplenishmentCommand}"
+                        CommandParameter="{Binding ElementName = amountBox, Path = Text}"/>
+            </StackPanel>
+        </Border>
+        <ContentPresenter/>
+        <DataGrid x:Name="DBView"
+                  Background="#1E1E1E"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding BankAccountsGroup}"
+                  SelectedIndex="{Binding SelectedIndex}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Номер счёта" Width="*" Binding="{Binding Number}"/>
+                <DataGridTextColumn Header="Тип счёта" MinWidth="150" Binding="{Binding Type}"/>
+                <DataGridTextColumn Header="Баланс"  MinWidth="150" Binding="{Binding Balance}"/>
+                <DataGridTextColumn Header="Состояние счёта"  MinWidth="150" Binding="{Binding Status}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>
