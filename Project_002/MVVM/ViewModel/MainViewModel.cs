@@ -21,30 +21,14 @@ namespace Project_002.MVVM.ViewModel
         public RelayCommand CloseAccountCommand { get; set; }
         public RelayCommand OpenAccountCommand { get; set; }
         public RelayCommand ReplenishmentCommand { get; set; }
+        public RelayCommand TranferCommand { get; set; }
 
-        private int amount;
-
-        public int Amount
-        {
-            get => amount;
-            set
-            {
-                amount = (int)value;
-            }
-        }
+        RepositoryModel<BankAccount> bankAccountRepository = new RepositoryModel<BankAccount>();
         public ObservableCollection<BankAccount> BankAccountsGroup { get; set; }
         public int SelectedIndex { get; set; }
-        private ObservableCollection<BankAccount> SetDataBankAccount()
-        {
-            BankAccountsGroup = new ObservableCollection<BankAccount>();
-            RepositoryModel<BankAccount> bankAccountRepository = new RepositoryModel<BankAccount>();
-            foreach (var item in bankAccountRepository.UploadData(LoadData.LoadDataBankAccount()))
-            {
-                BankAccountsGroup.Add(item);
-            }
-            return BankAccountsGroup;
-        }
-
+        public string Sender { get; set; }
+        public string Recipient { get; set; }
+        public int Amount { get; set; }
         public MainViewModel()
         {
             Application.Current.MainWindow.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
@@ -76,9 +60,29 @@ namespace Project_002.MVVM.ViewModel
             });
             ReplenishmentCommand = new RelayCommand(o =>
             {
-                BankAccountsGroup[SelectedIndex].Balance += Amount;
+                    BankAccountsGroup[SelectedIndex].Balance += Amount;
+                    RepositoryModel<BankAccount>.SaveToDataBase(BankAccountsGroup);
             });
-            BankAccountsGroup = SetDataBankAccount();
+            TranferCommand = new RelayCommand(o =>
+            {
+                foreach (var item in BankAccountsGroup)
+                {
+                    if (item.Number == Sender)
+                    {
+                        item.Balance -= Amount;
+                    }
+                }
+                foreach (var item in BankAccountsGroup)
+                {
+                    if (item.Number == Recipient)
+                    {
+                        item.Balance += Amount;
+                    }
+                }
+                RepositoryModel<BankAccount>.SaveToDataBase(BankAccountsGroup);
+            });
+
+            BankAccountsGroup = bankAccountRepository.UploadData(LoadData.LoadDataBankAccount());
         }
     }
 }

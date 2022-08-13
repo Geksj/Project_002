@@ -120,14 +120,14 @@
                         BorderBrush="Transparent"
                         Command="{Binding CloseAccountCommand}"
                         CommandParameter="{Binding ElementName = DBView, Path = SelectedIndex}"/>
-                <Button Content="Перевести"
+                <Button x:Name="tranferBtn"
+                        Content="Перевести"
                         FontSize="16"
                         FontWeight="Normal"
                         Foreground="LightGray"
                         Background="Transparent"
                         BorderBrush="Transparent"
-                        Command="{Binding }"
-                        CommandParameter="{Binding ElementName = DBView, Path = SelectedIndex}"/>
+                        Command="{Binding TranferCommand}"/>
                 <Button Content="Пополнить"
                         FontSize="16"
                         FontWeight="Normal"
@@ -135,7 +135,28 @@
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Command="{Binding ReplenishmentCommand}"
-                        CommandParameter="{Binding ElementName = amountBox, Path = Text}"/>
+                        CommandParameter="{Binding ElementName = DBView, Path = SelectedIndex}"/>
+                <TextBlock Text="Счет отправителя"
+                           Foreground="LightGray"
+                           FontSize="14"/>
+                <TextBox Background="#1E1E1E"
+                         BorderBrush="Transparent"
+                         Foreground="LightGray"
+                         Text="{Binding Sender}"/>
+                <TextBlock Text="Счет получателя"
+                           Foreground="LightGray"
+                           FontSize="14"/>
+                <TextBox Background="#1E1E1E"
+                         BorderBrush="Transparent"
+                         Foreground="LightGray"
+                         Text="{Binding Recipient}"/>
+                <TextBlock Text="Сумма"
+                           Foreground="LightGray"
+                           FontSize="14"/>
+                <TextBox Background="#1E1E1E"
+                         BorderBrush="Transparent"
+                         Foreground="LightGray"
+                         Text="{Binding Amount}"/>
             </StackPanel>
         </Border>
         <ContentPresenter/>
